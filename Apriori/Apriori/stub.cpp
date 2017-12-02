@@ -25,7 +25,23 @@
 
 int main()
 {
+	/* making variables */
+	SubList test;
+	int *subset;
+
+	subset = new int[3];
+	subset[0] = 10;
+	subset[1] = 11;
+	subset[2] = 12;
+
+	/* testing SubList object */
+
+	test.insert(subset);
+	test.display(3);
+
 	getFileName();
+
+	delete[] subset;
 
 	system("pause");
 	return 0;

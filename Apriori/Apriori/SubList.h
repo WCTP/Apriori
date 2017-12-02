@@ -42,7 +42,7 @@ class SubList
 			Node()
 			{
 				mItemSubset = NULL;
-				int mSupport = 0;
+				mSupport = 0;
 				mNext = NULL;
 			}
 
@@ -53,7 +53,7 @@ class SubList
 			Node(int *itemSubset)
 			{
 				mItemSubset = itemSubset;
-				int mSupport = 0;
+				mSupport = 0;
 				mNext = NULL;
 			}
 		};
