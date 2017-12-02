@@ -294,6 +294,7 @@ bool SubList::isExist(int *itemSubset)
 	return false;
 }
 
+// BROKEN
 /*      Pre:  int[]
  *     Post:  bool
  *  Purpose:  returns true node was found and successfully removed
@@ -321,8 +322,8 @@ bool SubList::remove(int *itemSubset)
 					}
 					else
 					{
-						mHead->mNext = NULL;
 						mHead = temp->mNext;
+						temp->mNext = NULL;
 					}
 				}
 				else if (temp == mTail)
