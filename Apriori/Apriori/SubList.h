@@ -87,7 +87,7 @@ class SubList
 		bool insert(int *itemSubset);
 		bool isEmpty();
 		bool isExist(int *itemSubset);
-		bool remove(int *itemSubset);
+		bool remove(int *itemSubset); // broken...
 		int* removeAt(int listIndex);
 
 		/* Operator Overloading */
