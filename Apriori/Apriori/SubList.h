@@ -50,7 +50,7 @@ class SubList
 			 *     Post:  initialize object
 			 *  Purpose:  to initialize the data in the object
 			 ********************************************************************/
-			Node(int *itemSubset)
+			Node(int* itemSubset)
 			{
 				mItemSubset = itemSubset;
 				mSupport = 0;
@@ -77,17 +77,17 @@ class SubList
 
 		/* Mutators */
 		void setItem(int listIndex, int subsetIndex, int item);
-		void setItemSubset(int listIndex, int *subset);
+		void setItemSubset(int listIndex, int* subset);
 		void setSupport(int listIndex, int support);
 
 		/* Functions */
 		void clear();
 		void display(int subsetLength);
 		void incrementSupport(int listIndex);
-		bool insert(int *itemSubset);
+		bool insert(int* itemSubset);
 		bool isEmpty();
-		bool isExist(int *itemSubset);
-		bool remove(int *itemSubset); // broken...
+		bool isExist(int* itemSubset);
+		bool remove(int* itemSubset); // broken...
 		int* removeAt(int listIndex);
 
 		/* Operator Overloading */

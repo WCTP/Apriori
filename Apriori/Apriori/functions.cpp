@@ -20,8 +20,9 @@
  *
  ***********************************************************************************************/
 #include "functions.h"
+#include "ItemsList.h"
 
- /*      Pre:  none
+/*      Pre:  none
  *     Post:  string
  *  Purpose:  retrieves filename from user
  ********************************************************************/
@@ -49,4 +50,111 @@ string getFileName()
 	fin.close();
 
 	return filename;
+}
+
+/*      Pre:  string, ItemList
+ *     Post:  int
+ *  Purpose:  makes a list of all the objects in the file and stores
+ *			  them in the ItemList object
+ ********************************************************************/
+int getItemList(string filename, ItemsList& items)
+{
+	int item;
+	int fileLength = 0;
+	fstream fin;
+	string line;
+	stringstream lineConvert;
+
+	fin.open(filename);
+
+	while (!fin.eof())
+	{
+		getline(fin, line);
+		lineConvert << line;
+
+		while (!lineConvert.eof())
+		{
+			lineConvert >> item;
+			items.insert(item);
+		}
+
+		lineConvert.str("");
+		lineConvert.clear();
+
+		fileLength++;
+	}
+
+	fin.close();
+
+	return fileLength;
+}
+
+/*      Pre:  2D dynamic bool array, string
+ *     Post:  none
+ *  Purpose:  goes through a transaction file and translates the file
+ *			  from numbers to a 2D bool array
+ ********************************************************************/
+void initializeTransactions(bool **transaction, int* itemTranslation, int itemCount, string filename)
+{
+	int item;
+	fstream fin;
+	string line;
+	stringstream lineConvert;
+
+	fin.open(filename);
+
+	for (int tranIndex = 0; !fin.eof(); tranIndex++)
+	{
+		getline(fin, line);
+		lineConvert << line;
+
+		while (!lineConvert.eof())
+		{
+			lineConvert >> item;
+			item = searchItem(itemTranslation, item, itemCount);
+			transaction[tranIndex][item] = 1;
+		}
+
+		lineConvert.str("");
+		lineConvert.clear();
+	}
+
+	fin.close();
+}
+
+/*      Pre:  2D dynamic bool array, string
+ *     Post:  none
+ *  Purpose:  goes through a transaction file and translates the file
+ *			  from numbers to a 2D bool array
+ ********************************************************************/
+int searchItem(int* itemTranslation, int item, int itemCount)
+{
+	int index;
+	bool found = false;
+
+	for (index = 0; index < itemCount && found == false; index++)
+	{
+		if (item == itemTranslation[index])
+		{
+			found = true;
+			index--;
+		}
+	}
+
+	return index;
+}
+
+/*      Pre:  ItemsList, int
+ *     Post:  none
+ *  Purpose:  transfers items from a ItemsList object to a dynamic
+ *			  integer array
+ ********************************************************************/
+void transferItems(ItemsList& items, int* itemTranslation)
+{
+	int length = items.getLength();
+
+	for (int x = 0; x < length; x++)
+	{
+		itemTranslation[x] = items.getItem(x);
+	}
 }

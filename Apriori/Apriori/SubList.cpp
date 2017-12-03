@@ -125,7 +125,7 @@ void SubList::setItem(int listIndex, int subsetIndex, int item)
  *     Post:  sets subset
  *  Purpose:  to initialize a subset in the SubList object
  ********************************************************************/
-void SubList::setItemSubset(int listIndex, int *subset)
+void SubList::setItemSubset(int listIndex, int* subset)
 {
 	Node *temp = mHead;
 
@@ -236,7 +236,7 @@ void SubList::incrementSupport(int listIndex)
  *     Post:  increment support
  *  Purpose:  to increment a specific subsets support
  ********************************************************************/
-bool SubList::insert(int *itemSubset)
+bool SubList::insert(int* itemSubset)
 {
 	Node *newNode;
 
@@ -277,7 +277,7 @@ bool SubList::isEmpty()
  *  Purpose:  returns true if a specific subset exists in SubList
  *			  object
  ********************************************************************/
-bool SubList::isExist(int *itemSubset)
+bool SubList::isExist(int* itemSubset)
 {
 	Node *temp = mHead;
 
@@ -299,7 +299,7 @@ bool SubList::isExist(int *itemSubset)
  *     Post:  bool
  *  Purpose:  returns true node was found and successfully removed
  ********************************************************************/
-bool SubList::remove(int *itemSubset)
+bool SubList::remove(int* itemSubset)
 {
 	Node *temp;
 	Node *oneBefore;

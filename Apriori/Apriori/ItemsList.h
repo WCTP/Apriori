@@ -56,7 +56,7 @@ public:
 	
 	~ItemsList();
 
-	int getItem(int index);/*
+	int getItem(int index);
 	int getLength();
 
 	void setItem(int index, int item);
@@ -69,7 +69,7 @@ public:
 	bool remove(int item);
 	int removeAt(int index);
 
-	int operator[] (int index);*/
+	int operator[] (int index);
 };
 
 #endif

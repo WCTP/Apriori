@@ -111,6 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="apriori.cpp" />
     <ClCompile Include="functions.cpp" />
     <ClCompile Include="ItemsList.cpp" />
     <ClCompile Include="stub.cpp" />

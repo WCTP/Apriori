@@ -1,5 +1,6 @@
-﻿  stub.cpp
-  SubList.cpp
+﻿  functions.cpp
+  apriori.cpp
+c:\users\delta\google drive\champlain semester 3\data structures & algorithms\final project\apriori\apriori\apriori\apriori.cpp(35): warning C4101: 'subFlipper': unreferenced local variable
   Generating Code...
   Apriori.vcxproj -> C:\Users\Delta\Google Drive\Champlain Semester 3\Data Structures & Algorithms\Final Project\Apriori\Apriori\x64\Debug\Apriori.exe
   Apriori.vcxproj -> C:\Users\Delta\Google Drive\Champlain Semester 3\Data Structures & Algorithms\Final Project\Apriori\Apriori\x64\Debug\Apriori.pdb (Partial PDB)
