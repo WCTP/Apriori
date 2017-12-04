@@ -16,7 +16,8 @@ void calculateSupport(SubList& sub1, SubList& sub2, bool flipper, bool **transac
 string getFileName();
 int getItemList(string filename, ItemsList& item);
 
-void generateSubSet(SubList& sub1, bool **transaction, int fileLength, int *translation);
+void generateSubSet1(SubList& sub1, int itemCount);
+void generateSubSet2(SubList& sub1, SubList& sub2, int itemCount);
 
 void initializeTransactions(bool **transaction, int* itemTranslation, int itemCount, string filename);
 

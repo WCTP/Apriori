@@ -24,16 +24,17 @@
 
 void calculateSupport(SubList& sub1, SubList& sub2, bool flipper, bool **transaction, int fileLength)
 {
-	int i, j;
+	int i, j, k;
 	if (flipper)
 	{
-		for (i = 0; i < fileLength; i++)
+		for(i = 0; i < sub1.getLength(); i++)
 		{
-			for (j = 0; j < /*transaction[i].length*/100; j++)
+			for (j = 0; j < /*length of each subset. I.e {0} is 1*/ 1; j++)
 			{
-				if (sub1.getSubset(0) == transaction[i][j])
+				for (k = 0; k < fileLength; k++)
 				{
-					sub1.incrementSupport(0);
+					if (transaction[k][sub1.getSupport(i)] == true)
+						sub1.incrementSupport(i);
 				}
 			}
 		}
@@ -128,20 +129,45 @@ int getItemList(string filename, ItemsList& items)
 	return fileLength;
 }
 
-void generateSubSet(SubList &sub1, bool **transaction, int fileLength, int* translation)
+void generateSubSet1(SubList &sub1, int itemCount)
 {
 	//Knowing the transaction array is rows for transaction, columns for whether that thing exists in items or not...
 	//read through and generate subsets of {1} {2}...{n} with support x
 	//Is sublist an item or an index for the item?
 
-	int i;
-	for (i = 0; i < fileLength; i++)
+	int *i;
+	int *subIndex;
+	i = new int;
+	for (*i = 0; *i < itemCount; *i++)
 	{
-		sub1.insert(translation);
-		//Is this right? Shouldn't it be at an index?
+		//subIndex = new int;
+		//*subIndex = i;
+		sub1.insert(i);
 	}
 
 	
+}
+
+void generateSubSet2(SubList& sub1,SubList &sub2, int itemCount)
+{
+	//Knowing the transaction array is rows for transaction, columns for whether that thing exists in items or not...
+	//read through and generate subsets of {1} {2}...{n} with support x
+	//Is sublist an item or an index for the item?
+
+	int i, j;
+	int *sub2Index;
+	for (i = 0; i < itemCount; i++)
+	{
+		for (j = i + 1; j < itemCount; j++)
+		{
+			sub2Index = new int[2];
+			sub2Index[0] = i;
+			sub2Index[1] = j;
+			sub2.insert(sub2Index);
+		}
+	}
+
+
 }
 
 /*      Pre:  2D dynamic bool array, string
