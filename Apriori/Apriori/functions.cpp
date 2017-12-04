@@ -170,6 +170,41 @@ void generateSubSet2(SubList& sub1,SubList &sub2, int itemCount)
 
 }
 
+void generateSubSet(SubList& sub1, SubList& sub2, int itemCount, int subSetNumber, bool subFlipper)
+{
+	int i, j, k;
+	int *newSubSet;
+	bool isSame = true;
+	for (i = 0; i < itemCount; i++)
+	{
+		for (j = i + 1; j < itemCount; j++)
+		{
+			
+			if (subFlipper)
+			{
+				isSame = true;
+				//dealing with sub1
+				for (k = 0; k < subSetNumber; k++)
+				{
+					if (sub1.getItem(i, j) != sub2.getItem(i, j))
+					{
+						isSame = false;
+					}
+				}
+
+				newSubSet = new int[subSetNumber];
+				for()
+			}
+			else
+			{
+				//dealing with sub2
+			}
+			
+			sub2.insert(newSubSet);
+		}
+	}
+}
+
 /*      Pre:  2D dynamic bool array, string
  *     Post:  none
  *  Purpose:  goes through a transaction file and translates the file
