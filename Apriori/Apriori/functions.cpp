@@ -22,6 +22,45 @@
 #include "functions.h"
 #include "ItemsList.h"
 
+void calculateSupport(SubList& sub1, SubList& sub2, bool flipper, bool **transaction, int fileLength)
+{
+	int i, j;
+	if (flipper)
+	{
+		for (i = 0; i < fileLength; i++)
+		{
+			for (j = 0; j < /*transaction[i].length*/100; j++)
+			{
+				if (sub1.getSubset(0) == transaction[i][j])
+				{
+					sub1.incrementSupport(0);
+				}
+			}
+		}
+
+
+		flipper = false;
+	}
+
+	else
+	{
+		for (i = 0; i < fileLength; i++)
+		{
+			for (j = 0; j < /*transaction[i].length*/100; j++)
+			{
+				if (sub2.getSubset(0) == transaction[i][j])
+				{
+					sub2.incrementSupport(0);
+				}
+			}
+		}
+
+		flipper = true;
+	}
+
+	
+}
+
 /*      Pre:  none
  *     Post:  string
  *  Purpose:  retrieves filename from user
@@ -89,6 +128,22 @@ int getItemList(string filename, ItemsList& items)
 	return fileLength;
 }
 
+void generateSubSet(SubList &sub1, bool **transaction, int fileLength, int* translation)
+{
+	//Knowing the transaction array is rows for transaction, columns for whether that thing exists in items or not...
+	//read through and generate subsets of {1} {2}...{n} with support x
+	//Is sublist an item or an index for the item?
+
+	int i;
+	for (i = 0; i < fileLength; i++)
+	{
+		sub1.insert(translation);
+		//Is this right? Shouldn't it be at an index?
+	}
+
+	
+}
+
 /*      Pre:  2D dynamic bool array, string
  *     Post:  none
  *  Purpose:  goes through a transaction file and translates the file
@@ -121,6 +176,20 @@ void initializeTransactions(bool **transaction, int* itemTranslation, int itemCo
 
 	fin.close();
 }
+
+void outputSupport(SubList& sub1, SubList& sub2, bool flipper, ofstream& fout)
+{
+	if (flipper)
+	{
+		fout << sub1;
+	}
+
+	else
+	{
+		fout << sub2;
+	}
+}
+
 
 /*      Pre:  2D dynamic bool array, string
  *     Post:  none

@@ -60,6 +60,11 @@ int main()
 
 	/* generating subsets */
 
+	//make subset 1?
+	//make subset 2?
+
+	//compare & prune??
+
 	system("pause");
 	return 0;
 }
