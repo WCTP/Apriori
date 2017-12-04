@@ -172,7 +172,7 @@ void generateSubSet2(SubList& sub1,SubList &sub2, int itemCount)
 
 void generateSubSet(SubList& sub1, SubList& sub2, int itemCount, int subSetNumber, bool subFlipper)
 {
-	int i, j, k;
+	int i, j, k, w;
 	int *newSubSet;
 	bool isSame = true;
 	for (i = 0; i < itemCount; i++)
@@ -182,25 +182,54 @@ void generateSubSet(SubList& sub1, SubList& sub2, int itemCount, int subSetNumbe
 			
 			if (subFlipper)
 			{
+
+				//dealing with sub2
 				isSame = true;
-				//dealing with sub1
-				for (k = 0; k < subSetNumber; k++)
+				for (k = 0; k < subSetNumber - 2; k++)
 				{
-					if (sub1.getItem(i, j) != sub2.getItem(i, j))
+					if (sub2.getItem(i, k) != sub2.getItem(j, k))
 					{
 						isSame = false;
 					}
 				}
 
-				newSubSet = new int[subSetNumber];
-				for()
+				if (isSame)
+				{
+					newSubSet = new int[subSetNumber];
+					for (w = 0; w < subSetNumber - 1; w++)
+					{
+						newSubSet[w] = sub2.getItem(i, w);
+					}
+					newSubSet[subSetNumber - 1] = sub2.getItem(j, subSetNumber - 2);
+					sub1.insert(newSubSet);
+				}
+
 			}
 			else
 			{
-				//dealing with sub2
+				//dealing with sub1
+				isSame = true;
+				for (k = 0; k < subSetNumber - 2; k++)
+				{
+					if (sub1.getItem(i, k) != sub1.getItem(j, k))
+					{
+						isSame = false;
+					}
+				}
+
+				if (isSame)
+				{
+					newSubSet = new int[subSetNumber];
+					for (w = 0; w < subSetNumber - 1; w++)
+					{
+						newSubSet[w] = sub1.getItem(i, w);
+					}
+					newSubSet[subSetNumber - 1] = sub1.getItem(j, subSetNumber - 2);
+					sub2.insert(newSubSet);
+				}
 			}
 			
-			sub2.insert(newSubSet);
+
 		}
 	}
 }
