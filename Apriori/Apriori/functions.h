@@ -11,7 +11,7 @@
 using namespace std;
 
 /* functions */
-void calculateSupport(SubList& sub1, SubList& sub2, bool flipper, bool **transaction, int fileLength);
+void calculateSupport(SubList& sub1, SubList& sub2, bool flipper, bool **transaction, int fileLength, int itemCount);
 
 string getFileName();
 int getItemList(string filename, ItemsList& item);
@@ -22,7 +22,7 @@ void generateSubSet(SubList& sub1, SubList& sub2, int itemCount, int subSetNumbe
 
 void initializeTransactions(bool **transaction, int* itemTranslation, int itemCount, string filename);
 
-void outputSupport(SubList& sub1, SubList& sub2, bool flipper, ofstream &fout);
+void outputSupport(SubList& sub1, SubList& sub2, bool flipper, ofstream &fout, int subLength);
 
 int searchItem(int* itemTranslation, int item, int itemCount);
 void transferItems(ItemsList& items, int* itemTranslation);

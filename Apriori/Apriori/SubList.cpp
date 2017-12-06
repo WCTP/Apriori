@@ -294,6 +294,37 @@ bool SubList::isExist(int* itemSubset)
 	return false;
 }
 
+void SubList::outputToFile(int subsetLength, ofstream& out)
+{
+	int subsetIndex;
+	Node *temp = mHead;
+
+	if (temp == NULL)
+	{
+		out << "ERROR: No subsets present." << endl;
+		return;
+	}
+
+	while (temp != NULL)
+	{
+		for (subsetIndex = 0; subsetIndex < subsetLength; subsetIndex++)
+		{
+			if (subsetIndex == 0)
+			{
+				out << "{ " << temp->mItemSubset[subsetIndex];
+			}
+			else
+			{
+				out << ", " << temp->mItemSubset[subsetIndex];
+
+			}
+		}
+
+		out << " } | Support: " << temp->mSupport << endl;
+		temp = temp->mNext;
+	}
+}
+
 // BROKEN
 /*      Pre:  int[]
  *     Post:  bool

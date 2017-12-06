@@ -22,7 +22,7 @@
 #include "functions.h"
 #include "ItemsList.h"
 
-void calculateSupport(SubList& sub1, SubList& sub2, bool flipper, bool **transaction, int fileLength)
+void calculateSupport(SubList& sub1, SubList& sub2, bool flipper, bool **transaction, int fileLength, int itemCount)
 {
 	int i, j, k;
 	if (flipper)
@@ -45,16 +45,18 @@ void calculateSupport(SubList& sub1, SubList& sub2, bool flipper, bool **transac
 
 	else
 	{
-		for (i = 0; i < fileLength; i++)
+		for (i = 0; i < sub2.getLength(); i++)
 		{
-			for (j = 0; j < /*transaction[i].length*/100; j++)
+			for (j = 0; j < itemCount; j++)
 			{
-				if (sub2.getSubset(0) == transaction[i][j])
+				for (k = 0; k < fileLength; k++)
 				{
-					sub2.incrementSupport(0);
+					if (transaction[k][sub1.getSupport(i)] == true)
+						sub2.incrementSupport(i);
 				}
 			}
 		}
+
 
 		flipper = true;
 	}
@@ -267,16 +269,16 @@ void initializeTransactions(bool **transaction, int* itemTranslation, int itemCo
 	fin.close();
 }
 
-void outputSupport(SubList& sub1, SubList& sub2, bool flipper, ofstream& fout)
+void outputSupport(SubList& sub1, SubList& sub2, bool flipper, ofstream& fout, int subLength)
 {
 	if (flipper)
 	{
-		fout << sub1;
+		sub1.outputToFile(subLength, fout);
 	}
 
 	else
 	{
-		fout << sub2;
+		sub1.outputToFile(subLength, fout);
 	}
 }
 

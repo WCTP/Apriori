@@ -23,6 +23,7 @@
 #define SUB_LIST_H
 
 #include <iostream>
+#include <fstream>
 
 using namespace std;
 
@@ -87,6 +88,7 @@ class SubList
 		bool insert(int* itemSubset);
 		bool isEmpty();
 		bool isExist(int* itemSubset);
+		void outputToFile(int subsetLength, ofstream& out);
 		bool remove(int* itemSubset); // broken...
 		int* removeAt(int listIndex);
 

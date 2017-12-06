@@ -33,6 +33,7 @@ int main()
 	int *itemTranslation;
 	bool **transactions;
 	bool subFlipper;
+	ofstream fout;
 	
 	/* retreiving filename and file length and item count  */
 	filename = getFileName();
@@ -61,7 +62,18 @@ int main()
 	/* generating subsets */
 
 	//make subset 1?
+	generateSubSet1(sub1, itemCount);
 	//make subset 2?
+	generateSubSet2(sub1, sub2, itemCount);
+
+	for (int i = 1; i < itemCount; i++)
+	{
+		outputSupport(sub1, sub2, subFlipper, fout, i);
+		generateSubSet(sub1, sub2, itemCount, i + 2, subFlipper);
+
+		subFlipper = !subFlipper;
+	}
+	
 
 	//compare & prune??
 
