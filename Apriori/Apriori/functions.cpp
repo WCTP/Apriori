@@ -22,46 +22,89 @@
 #include "functions.h"
 #include "ItemsList.h"
 
-void calculateSupport(SubList& sub1, SubList& sub2, bool flipper, bool **transaction, int fileLength, int itemCount)
+/*      Pre:  SubList, SubList, bool, bool 2D array, int, int
+ *     Post:  changes SubList objects
+ *  Purpose:  goes through all the transactions and sees if a subset
+ *			  appears in the transactions array, if they do then
+ *			  increment the support
+ ********************************************************************/
+void calculateSupport(SubList& sub1, SubList& sub2, bool flipper, bool **transaction, int fileLength, int subsetLength)
 {
-	int i, j, k;
-	if (flipper)
+	int i, j, k, subLength;
+	bool isSupport;
+
+	int *tempSubset;
+
+	cout << "Calculating Support for Subset-" << subsetLength << endl;
+
+	if (flipper == true)
 	{
-		for(i = 0; i < sub1.getLength(); i++)
+		subLength = sub1.getLength();
+
+		for (i = 0; i < subLength; i++)
 		{
-			for (j = 0; j < /*length of each subset. I.e {0} is 1*/ 1; j++)
+			tempSubset = new int[subsetLength];
+
+			for (j = 0; j < subsetLength; j++)
 			{
-				for (k = 0; k < fileLength; k++)
+				tempSubset[j] = sub1.getItem(i, j);
+			}
+
+			for (k = 0; k < fileLength; k++)
+			{
+				isSupport = true;
+
+				for (j = 0; j < subsetLength; j++)
 				{
-					if (transaction[k][sub1.getSupport(i)] == true)
-						sub1.incrementSupport(i);
+					if (transaction[k][tempSubset[j]] == false)
+					{
+						isSupport = false;
+					}
+				}
+
+				if (isSupport == true)
+				{
+					sub1.incrementSupport(i);
 				}
 			}
+
+			delete[] tempSubset;
 		}
-
-
-		flipper = false;
 	}
-
 	else
 	{
-		for (i = 0; i < sub2.getLength(); i++)
+		subLength = sub2.getLength();
+
+		for (i = 0; i < subLength; i++)
 		{
-			for (j = 0; j < itemCount; j++)
+			tempSubset = new int[subsetLength];
+
+			for (j = 0; j < subsetLength; j++)
 			{
-				for (k = 0; k < fileLength; k++)
+				tempSubset[j] = sub2.getItem(i, j);
+			}
+
+			for (k = 0; k < fileLength; k++)
+			{
+				isSupport = true;
+
+				for (j = 0; j < subsetLength; j++)
 				{
-					if (transaction[k][sub1.getSupport(i)] == true)
-						sub2.incrementSupport(i);
+					if (transaction[k][tempSubset[j]] == false)
+					{
+						isSupport = false;
+					}
+				}
+
+				if (isSupport == true)
+				{
+					sub2.incrementSupport(i);
 				}
 			}
+
+			delete[] tempSubset;
 		}
-
-
-		flipper = true;
 	}
-
-	
 }
 
 /*      Pre:  none
@@ -131,26 +174,33 @@ int getItemList(string filename, ItemsList& items)
 	return fileLength;
 }
 
+/*      Pre:  SubList, int
+ *     Post:  loads SubList object
+ *  Purpose:  generate the 1-subsets of the transactions array
+ ********************************************************************/
 void generateSubSet1(SubList &sub1, int itemCount)
 {
 	//Knowing the transaction array is rows for transaction, columns for whether that thing exists in items or not...
 	//read through and generate subsets of {1} {2}...{n} with support x
 	//Is sublist an item or an index for the item?
 
-	int *i;
-	int *subIndex;
-	i = new int;
-	for (*i = 0; *i < itemCount; *i++)
+	int i;
+	int *sub1Index;
+	for (i = 0; i < itemCount; i++)
 	{
-		//subIndex = new int;
-		//*subIndex = i;
-		sub1.insert(i);
+		sub1Index = new int[1];
+		sub1Index[0] = i;
+		sub1.insert(sub1Index, 1);
 	}
 
-	
+
 }
 
-void generateSubSet2(SubList& sub1,SubList &sub2, int itemCount)
+/*      Pre:  SubList, SubList, int
+ *     Post:  loads SubList object
+ *  Purpose:  generate the 2-subsets of the transactions array
+ ********************************************************************/
+void generateSubSet2(SubList& sub1, SubList &sub2, int itemCount)
 {
 	//Knowing the transaction array is rows for transaction, columns for whether that thing exists in items or not...
 	//read through and generate subsets of {1} {2}...{n} with support x
@@ -165,74 +215,105 @@ void generateSubSet2(SubList& sub1,SubList &sub2, int itemCount)
 			sub2Index = new int[2];
 			sub2Index[0] = i;
 			sub2Index[1] = j;
-			sub2.insert(sub2Index);
+			sub2.insert(sub2Index, 2);
 		}
 	}
 
 
 }
 
-void generateSubSet(SubList& sub1, SubList& sub2, int itemCount, int subSetNumber, bool subFlipper)
+/*      Pre:  SubList, SubList, int, int, bool 
+ *     Post:  loads one SubList object
+ *  Purpose:  generates the next subset based off the previous
+ *			  SubList object
+ ********************************************************************/
+bool generateSubSet(SubList& sub1, SubList& sub2, int itemCount, int subSetNumber, bool subFlipper)
 {
 	int i, j, k, w;
 	int *newSubSet;
 	bool isSame = true;
-	for (i = 0; i < itemCount; i++)
-	{
-		for (j = i + 1; j < itemCount; j++)
-		{
-			
-			if (subFlipper)
-			{
+	bool firstSame = true;
 
-				//dealing with sub2
+	if (subFlipper == true)
+	{
+		sub1.clear();
+
+		for (i = 0; i < sub2.getLength(); i++)
+		{
+			firstSame = true;
+
+			for (j = i + 1; j < sub2.getLength() && firstSame == true; j++)
+			{
 				isSame = true;
-				for (k = 0; k < subSetNumber - 2; k++)
+				
+				for (k = 0; k < subSetNumber - 2 && isSame == true; k++)
 				{
 					if (sub2.getItem(i, k) != sub2.getItem(j, k))
 					{
 						isSame = false;
+						if (k == 0)
+						{
+							firstSame = false;
+						}
 					}
+
 				}
 
-				if (isSame)
+				if (isSame == true)
 				{
 					newSubSet = new int[subSetNumber];
-					for (w = 0; w < subSetNumber - 1; w++)
+					for (k = 0; k < subSetNumber - 1; k++)
 					{
-						newSubSet[w] = sub2.getItem(i, w);
+						newSubSet[k] = sub2.getItem(i, k);
 					}
 					newSubSet[subSetNumber - 1] = sub2.getItem(j, subSetNumber - 2);
-					sub1.insert(newSubSet);
+					sub1.insert(newSubSet, subSetNumber);
+					delete[] newSubSet;
 				}
-
 			}
-			else
+		}
+
+		return true;
+	}
+	else
+	{
+		sub2.clear();
+
+		for (i = 0; i < sub1.getLength(); i++)
+		{
+			firstSame = true;
+
+			for (j = i + 1; j < sub1.getLength() && firstSame == true; j++)
 			{
-				//dealing with sub1
 				isSame = true;
-				for (k = 0; k < subSetNumber - 2; k++)
+
+				for (k = 0; k < subSetNumber - 2 && isSame == true; k++)
 				{
 					if (sub1.getItem(i, k) != sub1.getItem(j, k))
 					{
 						isSame = false;
+						if (k == 0)
+						{
+							firstSame = false;
+						}
 					}
 				}
 
-				if (isSame)
+				if (isSame == true)
 				{
 					newSubSet = new int[subSetNumber];
-					for (w = 0; w < subSetNumber - 1; w++)
+					for (k = 0; k < subSetNumber - 1; k++)
 					{
-						newSubSet[w] = sub1.getItem(i, w);
+						newSubSet[k] = sub1.getItem(i, k);
 					}
 					newSubSet[subSetNumber - 1] = sub1.getItem(j, subSetNumber - 2);
-					sub2.insert(newSubSet);
+					sub2.insert(newSubSet, subSetNumber);
+					delete[] newSubSet;
 				}
 			}
-			
-
 		}
+
+		return true;
 	}
 }
 
@@ -269,16 +350,52 @@ void initializeTransactions(bool **transaction, int* itemTranslation, int itemCo
 	fin.close();
 }
 
-void outputSupport(SubList& sub1, SubList& sub2, bool flipper, ofstream& fout, int subLength)
+/*      Pre:  SubList, SubList, bool, ofstream, int
+ *     Post:  none
+ *  Purpose:  calls the output function with the correct SubList
+ *			  object
+ ********************************************************************/
+void outputSupport(SubList& sub1, SubList& sub2, bool flipper, ofstream& fout, int subLength, int* itemTranslation)
 {
 	if (flipper)
 	{
-		sub1.outputToFile(subLength, fout);
+		sub1.outputToFile(subLength, fout, itemTranslation);
 	}
 
 	else
 	{
-		sub1.outputToFile(subLength, fout);
+		sub2.outputToFile(subLength, fout, itemTranslation);
+	}
+}
+
+/*      Pre:  SubList, SubList, bool, int, int
+ *     Post:  changes SubList
+ *  Purpose:  goes through the SubList object and takes out all
+ *			  subsets that do not meet the minimum support threshold
+ ********************************************************************/
+void pruneSubSet(SubList& sub1, SubList& sub2, bool subFlipper, int subsetLength, int supportMinimum)
+{
+	if (subFlipper == true)
+	{
+		for (int i = 0; i < sub1.getLength(); i++)
+		{
+			if (sub1.getSupport(i) < supportMinimum)
+			{
+				sub1.removeAt(i);
+				i--;
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < sub2.getLength(); i++)
+		{
+			if (sub2.getSupport(i) < supportMinimum)
+			{
+				sub2.removeAt(i);
+				i--;
+			}
+		}
 	}
 }
 

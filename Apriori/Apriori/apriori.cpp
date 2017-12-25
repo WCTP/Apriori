@@ -27,13 +27,15 @@ int main()
 {
 	/* declaring variables */
 	int fileLength, itemCount, x, y;
+	int supportMinimum = 2;
 	string filename;
 	SubList sub1, sub2;
 	ItemsList items;
 	int *itemTranslation;
 	bool **transactions;
-	bool subFlipper;
-	ofstream fout;
+	bool arrayExists = true;
+	bool subFlipper = true;			// value must be true
+	ofstream fout("output.txt");
 	
 	/* retreiving filename and file length and item count  */
 	filename = getFileName();
@@ -45,7 +47,7 @@ int main()
 	transferItems(items, itemTranslation);
 
 	/* initializing the transactions array */
-	transactions = new bool*[itemCount];
+	transactions = new bool*[fileLength];
 	for (x = 0; x < fileLength; x++)
 	{
 		transactions[x] = new bool[itemCount];
@@ -54,29 +56,53 @@ int main()
 	{
 		for (y = 0; y < itemCount; y++)
 		{
-			transactions[x][y] = 0;
+			transactions[x][y] = false;
 		}
 	}
 	initializeTransactions(transactions, itemTranslation, itemCount, filename);
 
-	/* generating subsets */
+	/* generating subsets 1 & 2 */
 
-	//make subset 1?
+	// make subset 1, calculate support, prune, and output
 	generateSubSet1(sub1, itemCount);
-	//make subset 2?
-	generateSubSet2(sub1, sub2, itemCount);
+	calculateSupport(sub1, sub2, true, transactions, fileLength, 1);
+	pruneSubSet(sub1, sub2, true, 1, supportMinimum);
+	outputSupport(sub1, sub2, true, fout, 1, itemTranslation);
 
-	for (int i = 1; i < itemCount; i++)
+	// make subset 2, calculate support, prune, and output
+	generateSubSet2(sub1, sub2, itemCount);
+	calculateSupport(sub1, sub2, false, transactions, fileLength, 2);
+	pruneSubSet(sub1, sub2, false, 2, supportMinimum);
+	outputSupport(sub1, sub2, false, fout, 2, itemTranslation);
+
+	/* generating remaining subsets, calculate support, prune, and output */
+	for (int i = 3; i < itemCount && arrayExists == true; i++)
 	{
-		outputSupport(sub1, sub2, subFlipper, fout, i);
-		generateSubSet(sub1, sub2, itemCount, i + 2, subFlipper);
+		generateSubSet(sub1, sub2, itemCount, i, subFlipper);
+		calculateSupport(sub1, sub2, subFlipper, transactions, fileLength, i);
+		pruneSubSet(sub1, sub2, subFlipper, i, supportMinimum);
+		outputSupport(sub1, sub2, subFlipper, fout, i, itemTranslation);
+		
+		if (subFlipper)
+		{
+			arrayExists = !sub1.isEmpty();
+		}
+		else
+		{
+			arrayExists = !sub2.isEmpty();
+		}
 
 		subFlipper = !subFlipper;
 	}
+
+	/* deleting pointers */
+	delete[] itemTranslation;
+	for (x = 0; x < fileLength; x++)
+	{
+		delete[] transactions[x];
+	}
+	delete[] transactions;
 	
-
-	//compare & prune??
-
 	system("pause");
 	return 0;
 }

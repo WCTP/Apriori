@@ -28,48 +28,48 @@ using namespace std;
 
 class ItemsList
 {
-private:
-	struct Node
-	{
-		int mItemNumber;
-		Node *mNext;
-
-		Node()
+	private:
+		struct Node
 		{
-			mItemNumber = -1;
-			mNext = NULL;
-		}
+			int mItemNumber;
+			Node *mNext;
 
-		Node(int itemNumber)
-		{
-			mItemNumber = mItemNumber;
-			mNext = NULL;
-		}
-	};
+			Node()
+			{
+				mItemNumber = -1;
+				mNext = NULL;
+			}
 
-	Node *mHead;
-	Node *mTail;
-	int mLength;
+			Node(int itemNumber)
+			{
+				mItemNumber = mItemNumber;
+				mNext = NULL;
+			}
+		};
 
-public:
-	ItemsList();
+		Node *mHead;
+		Node *mTail;
+		int mLength;
+
+	public:
+		ItemsList();
 	
-	~ItemsList();
+		~ItemsList();
 
-	int getItem(int index);
-	int getLength();
+		int getItem(int index);
+		int getLength();
 
-	void setItem(int index, int item);
+		void setItem(int index, int item);
 
-	void clear();
-	void display();
-	bool insert(int item);
-	bool isEmpty();
-	bool isExist(int item);
-	bool remove(int item);
-	int removeAt(int index);
+		void clear();
+		void display();
+		bool insert(int item);
+		bool isEmpty();
+		bool isExist(int item);
+		bool remove(int item);
+		int removeAt(int index);
 
-	int operator[] (int index);
+		int operator[] (int index);
 };
 
 #endif

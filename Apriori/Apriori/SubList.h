@@ -47,13 +47,28 @@ class SubList
 				mNext = NULL;
 			}
 
-			/*      Pre:  none
+			/*      Pre:  int dynamic array, int
 			 *     Post:  initialize object
 			 *  Purpose:  to initialize the data in the object
 			 ********************************************************************/
-			Node(int* itemSubset)
+			Node(int* itemSubset, int subsetLength)
 			{
-				mItemSubset = itemSubset;
+				mItemSubset = new int[subsetLength];
+				for (int i = 0; i < subsetLength; i++)
+				{
+					mItemSubset[i] = itemSubset[i];
+				}
+				mSupport = 0;
+				mNext = NULL;
+			}
+
+			/*      Pre:  int dynamic array, int
+			 *     Post:  initialize object
+			 *  Purpose:  to initialize the data in the object
+			 ********************************************************************/
+			~Node()
+			{
+				delete[] mItemSubset;
 				mSupport = 0;
 				mNext = NULL;
 			}
@@ -83,13 +98,12 @@ class SubList
 
 		/* Functions */
 		void clear();
-		void display(int subsetLength);
+		bool display(int subsetLength);
 		void incrementSupport(int listIndex);
-		bool insert(int* itemSubset);
+		bool insert(int* itemSubset, int subsetLength);
 		bool isEmpty();
 		bool isExist(int* itemSubset);
-		void outputToFile(int subsetLength, ofstream& out);
-		bool remove(int* itemSubset); // broken...
+		void outputToFile(int subsetLength, ofstream& out, int* itemTranslation);
 		int* removeAt(int listIndex);
 
 		/* Operator Overloading */

@@ -56,12 +56,17 @@ int SubList::getItem(int listIndex, int subsetIndex)
 {
 	Node *temp = mHead;
 
-	for (int x = 0; x < listIndex; x++)
+	if (temp != NULL)
 	{
-		temp = temp->mNext;
-	}
+		for (int x = 0; x < listIndex; x++)
+		{
+			temp = temp->mNext;
+		}
 
-	return temp->mItemSubset[subsetIndex];
+		return temp->mItemSubset[subsetIndex];
+	}
+	
+	return -1;
 }
 
 /*      Pre:  none
@@ -185,15 +190,15 @@ void SubList::clear()
  *     Post:  outputs list to standard output
  *  Purpose:  to show all subsets in a list
  ********************************************************************/
-void SubList::display(int subsetLength)
+bool SubList::display(int subsetLength)
 {
 	int subsetIndex;
 	Node *temp = mHead;
 
 	if (temp == NULL)
 	{
-		cout << "ERROR: No subsets present." << endl;
-		return;
+		cout << "DISPLAY ERROR: No " << subsetLength << "-subsets present." << endl;
+		return false;
 	}
 
 	while (temp != NULL)
@@ -214,6 +219,8 @@ void SubList::display(int subsetLength)
 		cout << " } | Support: " << temp->mSupport << endl;
 		temp = temp->mNext;
 	}
+
+	return true;
 }
 
 /*      Pre:  int
@@ -236,11 +243,11 @@ void SubList::incrementSupport(int listIndex)
  *     Post:  increment support
  *  Purpose:  to increment a specific subsets support
  ********************************************************************/
-bool SubList::insert(int* itemSubset)
+bool SubList::insert(int* itemSubset, int subsetLength)
 {
 	Node *newNode;
 
-	newNode = new Node(itemSubset);
+	newNode = new Node(itemSubset, subsetLength);
 
 	if (newNode == NULL)
 	{
@@ -294,14 +301,21 @@ bool SubList::isExist(int* itemSubset)
 	return false;
 }
 
-void SubList::outputToFile(int subsetLength, ofstream& out)
+/*      Pre:  int, ofstream
+ *     Post:  file output
+ *  Purpose:  outputs the subset and support from SubList object,
+ *			  and will throw error if the subset cannot be generated
+ *			  NOTE: this error can be okay if the pruning process has
+ *					stopped larger subsets from being created
+ ********************************************************************/
+void SubList::outputToFile(int subsetLength, ofstream& out, int* itemTranslation)
 {
 	int subsetIndex;
 	Node *temp = mHead;
 
 	if (temp == NULL)
 	{
-		out << "ERROR: No subsets present." << endl;
+		out << "OUTPUT ERROR: No " << subsetLength << "-subsets present." << endl;
 		return;
 	}
 
@@ -311,11 +325,11 @@ void SubList::outputToFile(int subsetLength, ofstream& out)
 		{
 			if (subsetIndex == 0)
 			{
-				out << "{ " << temp->mItemSubset[subsetIndex];
+				out << "{ " << itemTranslation[temp->mItemSubset[subsetIndex]];
 			}
 			else
 			{
-				out << ", " << temp->mItemSubset[subsetIndex];
+				out << ", " << itemTranslation[temp->mItemSubset[subsetIndex]];
 
 			}
 		}
@@ -323,63 +337,6 @@ void SubList::outputToFile(int subsetLength, ofstream& out)
 		out << " } | Support: " << temp->mSupport << endl;
 		temp = temp->mNext;
 	}
-}
-
-// BROKEN
-/*      Pre:  int[]
- *     Post:  bool
- *  Purpose:  returns true node was found and successfully removed
- ********************************************************************/
-bool SubList::remove(int* itemSubset)
-{
-	Node *temp;
-	Node *oneBefore;
-
-	if (mHead != NULL)
-	{
-		temp = mHead;
-		oneBefore = temp;
-
-		while (temp != NULL)
-		{
-			if (temp->mItemSubset == itemSubset)
-			{
-				if (temp == mHead)
-				{
-					if (mHead == mTail)
-					{
-						mHead = NULL;
-						mTail = NULL;
-					}
-					else
-					{
-						mHead = temp->mNext;
-						temp->mNext = NULL;
-					}
-				}
-				else if (temp == mTail)
-				{
-					mTail = oneBefore;
-					mTail->mNext = NULL;
-				}
-				else
-				{
-					oneBefore->mNext = temp->mNext;
-
-				}
-				
-				temp->mNext = NULL;
-				delete temp;
-				mLength--;
-				return true;
-			}
-
-			oneBefore = temp;
-			temp = temp->mNext;
-		}
-	}
-
-	return false;
 }
 
 /*      Pre:  int
